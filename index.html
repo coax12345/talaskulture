@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Prodaja karata za pozorište</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <h2>Prodaja karata za pozorište</h2>
+        <form action="sendEmail.php" method="post">
+            <label for="pozoriste">Izaberite pozorište:</label>
+            <select name="pozoriste" id="pozoriste" onchange="showPredstave()">
+                <option value="1">Pozorište 1</option>
+                <option value="2">Pozorište 2</option>
+                <option value="3">Pozorište 3</option>
+                <option value="4">Pozorište 4</option>
+                <option value="5">Pozorište 5</option>
+            </select><br><br>
+            
+            <label for="predstava">Izaberite predstavu:</label>
+            <select name="predstava" id="predstava" onchange="showPrice()">
+                <!-- Options for predstave will be dynamically added here -->
+            </select><br><br>
+            
+            <label for="broj_karata">Broj karata (1-10):</label>
+            <input type="number" name="broj_karata" id="broj_karata" min="1" max="10" oninput="calculateTotal()"><br><br>
+            
+            <label for="ime">Ime:</label>
+            <input type="text" name="ime" id="ime"><br><br>
+            
+            <label for="prezime">Prezime:</label>
+            <input type="text" name="prezime" id="prezime"><br><br>
+            
+            <label for="gmail">Gmail:</label>
+            <input type="email" name="gmail" id="gmail"><br><br>
+            
+            <label for="telefon">Broj telefona:</label>
+            <input type="text" name="telefon" id="telefon"><br><br>
+            
+            <div id="cena_predstave">Cena predstave: </div><br>
+            <div id="ukupna_cena">Ukupan iznos: </div><br>
+            
+            <input type="submit" value="Rezerviši">
+        </form>
+    </div>
+
+    <script>
+        var predstavePoPozoristu = {
+            1: [
+                { naziv: "Predstava 1", cena: 1500 },
+                { naziv: "Predstava 2", cena: 1600 },
+                { naziv: "Predstava 3", cena: 1700 }
+            ],
+            2: [
+                { naziv: "Predstava 4", cena: 1800 },
+                { naziv: "Predstava 5", cena: 1900 },
+                { naziv: "Predstava 6", cena: 2000 }
+            ],
+            3: [
+                { naziv: "Predstava 7", cena: 1700 },
+                { naziv: "Predstava 8", cena: 1800 },
+                { naziv: "Predstava 9", cena: 1900 }
+            ],
+            4: [
+                { naziv: "Predstava 10", cena: 1600 },
+                { naziv: "Predstava 11", cena: 1700 },
+                { naziv: "Predstava 12", cena: 1800 }
+            ],
+            5: [
+                { naziv: "Predstava 13", cena: 1900 },
+                { naziv: "Predstava 14", cena: 1800 },
+                { naziv: "Predstava 15", cena: 1700 }
+            ]
+        };
+
+        function showPredstave() {
+            var pozoriste = document.getElementById("pozoriste").value;
+            var predstave = predstavePoPozoristu[pozoriste];
+            var predstavaSelect = document.getElementById("predstava");
+            predstavaSelect.innerHTML = "";
+            for (var i = 0; i < predstave.length; i++) {
+                var option = document.createElement("option");
+                option.value = i; // Set the value to the index
+                option.text = predstave[i].naziv + " - Cena: " + predstave[i].cena + " din";
+                predstavaSelect.appendChild(option);
+            }
+            showPrice(); // Show the price of the initial selected option
+        }
+
+        function showPrice() {
+            var predstavaSelect = document.getElementById("predstava");
+            var cena = predstavePoPozoristu[document.getElementById("pozoriste").value][predstavaSelect.value].cena;
+            var cenaElement = document.getElementById("cena_predstave");
+            cenaElement.textContent = "Cena predstave: " + cena + " din";
+        }
+
+        function calculateTotal() {
+            var predstavaSelect = document.getElementById("predstava");
+            var cena = predstavePoPozoristu[document.getElementById("pozoriste").value][predstavaSelect.value].cena;
+            var broj_karata = document.getElementById("broj_karata").value;
+            var ukupna_cena = cena * broj_karata;
+            document.getElementById("ukupna_cena").textContent = "Ukupan iznos: " + ukupna_cena + " dinara";
+        }
+
+        // Call showPredstave() when the page loads
+        window.onload = showPredstave;
+    </script>
+</body>
+</html>
